@@ -1,5 +1,8 @@
 # coillte-mdii
-MapMint services used to import data coming from a specific tool used to record tree informations.
+MapMint services used to import data coming from a [Haglof MD-II callipers][1]
+ used to record forest inventory data. This services processes the zip file that is generated from the calliper's associated Android app. 
+
+[1]: http://www.haglofsweden.com/index.php/en/products/instruments/calipers/473-md-ii-caliper
 
 Setup
 ===========
