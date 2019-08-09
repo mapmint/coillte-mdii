@@ -42,7 +42,7 @@ def sendmail(conf,inputs,outputs):
     cur=con.conn.cursor()
     req="SELECT mail from mm.users, mm.user_group, mm.groups where mm.users.id=id_user and  mm.groups.id=id_group and name = $q$"+conf["mm_mail"]["group"]+"$q$"
     cur.execute(req)
-    val=cur.fetch_all()
+    val=cur.fetchall()
     server=smtplib.SMTP(host='localhost',port=25)
     f=open(conf["mm_mail"]["path"]+"/msg_content.txt","r")
     for i in range(len(val)):
