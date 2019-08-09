@@ -22,7 +22,7 @@ group=mapmint-group
 path=/usr/lib/cgi-bin/mm/cmd2/
 ```
 
-The three first parameters are used to define the IMAP4 server where server is the host to connect to, and user and password are the one used to authentify to the IMAP4 server.
+The three first parameters are used to define the IMAP4 server where ```server``` is the host to connect to, and ```user``` and ```password``` are the informations used to authentify to the IMAP4 server.
 
 The ```group``` parameter is used to define to who should be send an email notifying for the availability of the new data, the value should be a MapMint group with members, in other case no mail will be sent.
 
