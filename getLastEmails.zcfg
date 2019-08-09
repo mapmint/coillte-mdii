@@ -1,0 +1,27 @@
+[getLastEmails]
+ Title = List all received emails and sotre any attachment
+ Abstract = List all received emails and sotre any attachment
+ processVersion = 1
+ storeSupported = true
+ statusSupported = true
+ serviceType = Python
+ serviceProvider = service
+ <DataInputs>
+  [a]
+   Title = The input datastore
+   Abstract = The input datastore name to search for datasource.
+   minOccurs = 0
+   maxOccurs = 1
+   <LiteralData>
+    DataType = string
+    <Default />
+   </LiteralData>
+ </DataInputs>
+ <DataOutputs>
+  [Result]
+   Title = The resulting  directory path
+   Abstract = The resulting  directory path containing the uncompressed archive
+   <LiteralData>
+    DataType = string
+    <Default />
+   </LiteralData>

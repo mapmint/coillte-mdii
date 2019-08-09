@@ -1,0 +1,10 @@
+Hello Coillte MapMint admins,
+the zip file from [USER] has been imported.
+
+You can access the project showing the new data available from here:
+  https://coillte.mapmint.com/ui/public/MII_Test
+
+Best regards,
+
+MapMint Application
+

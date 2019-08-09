@@ -1,0 +1,28 @@
+[publishZipFiles]
+ Title = This carries out the validation checks for the segment integration.
+ Abstract = This carries out the validation checks for the segment integration.
+ processVersion = 1
+ storeSupported = true
+ statusSupported = true
+ serviceType = JS
+ serviceProvider = service.js
+ <DataInputs>
+  [zip]
+   Title = The input datastore
+   Abstract = The input datastore name to search for datasource.
+   minOccurs = 1
+   maxOccurs = unbounded
+   <ComplexData>
+    <Default>
+     mimeType = application/zip
+    </Default>
+   </ComplexData>
+ </DataInputs>
+ <DataOutputs>
+  [Result]
+   Title = The resulting  directory path
+   Abstract = The resulting  directory path containing the uncompressed archive
+   <LiteralData>
+    DataType = string
+    <Default />
+   </LiteralData>
