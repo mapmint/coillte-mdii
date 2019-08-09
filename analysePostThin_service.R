@@ -1,5 +1,6 @@
 ################################################################################
 ##  Author:   Gérald Fenoy, gerald.fenoy@geolabs.fr
+##            Daniel McInerney, daniel.mcinerney@coillte.ie
 ##
 ##  Copyright (c) 2019 Coillte Teoranta. All rights reserved.
 ##
