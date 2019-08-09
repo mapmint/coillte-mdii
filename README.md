@@ -1,6 +1,28 @@
 # coillte-mdii
 MapMint services used to import data coming from a specific tool used to record tree informations.
 
+Setup
+===========
+
+Clone this repository then copy the directory as ```cmd2``` in your MapMint Services location (tradionaly in ```/usr/lib/cgi-bin/mm``` on a GNU/Linux host).
+
+```
+git clone https://github.com/mapmint/coillte-mdii.git cmd2
+sudo cp -r cmd2 /usr/lib/cgi-bin/mm/
+```
+
+Edit your ```main.cfg``` file located with your MapMint Services to add the following section:
+
+```
+[mm_mail]
+server=your.mailserver.net
+user=userName
+password=userPassword
+group=mapmint-group
+path=/usr/lib/cgi-bin/mm/cmd2/
+```
+
+
 How-to use
 ===========
 
