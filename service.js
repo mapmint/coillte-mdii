@@ -138,8 +138,8 @@ function publishZipFiles(conf,inputs,outputs){
 	alert(myExecuteResult00);
 	produced_dirs.push(myExecuteResult00);
 	alert(myExecuteResult00+"/"+cFile.replace(/\/var\/www\/html\//g,"").replace(/.zip/g,".xls"));
-	var xlsFile=myExecuteResult00+"/"+cFile.replace(/\/var\/www\/html\/tmp/g,"").replace(/.zip/g,".xls").replace(/2.2/g,"2_2").replace(/-/g,"_");
-	var kmlFile=myExecuteResult00+"/"+cFile.replace(/\/var\/www\/html\/tmp/g,"").replace(/.zip/g,".kml").replace(/2.2/g,"2_2").replace(/-/g,"_");
+	var xlsFile=myExecuteResult00+"/"+cFile.replace(/\/var\/www\/html\/tmp/g,"").replace(/\./g,"_").replace(/_zip/g,".xls").replace(/-/g,"_");
+	var kmlFile=myExecuteResult00+"/"+cFile.replace(/\/var\/www\/html\/tmp/g,"").replace(/\./g,"_").replace(/_zip/g,".kml").replace(/-/g,"_");
 	var inputs01={
 	    "db": {"dataType":"string", "type":"literal", "value": conf["main"]["tmpPath"]+"/postThin"+/**/conf["lenv"]["usid"]+"_"+i+/**/".db"},
 	    "data": {"mimeType":"application/zip", "type":"reference", "value": "file://"+xlsFile }
