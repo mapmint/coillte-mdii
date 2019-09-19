@@ -51,4 +51,7 @@ In case you face any issue during import of your data. Then, you can manually tr
 
 https://<YOUR_HOST>/cgi-bin/mm/zoo_loader.cgi?request=Execute&service=WPS&version=1.0.0&Identifier=cmd2.publishZipFiles&DataInputs=zip=Reference@xlink:href=file:///YOUR_FILENAME_PATH.zip
 
+For instance, an example would be: 
+https://coillte.mapmint.com/cgi-bin/mm/zoo_loader.cgi?request=Execute&service=WPS&version=1.0.0&Identifier=cmd2.publishZipFiles&DataInputs=zip=Reference@xlink:href=file:///var/www/html/tmp/LS08H0099.2019-09-19.zip
+
 Before invoking the previous URL, we invite you to run the following command: ```tail -f /var/log/apache/error.log -n0 > log``` and press ```CTRL+c``` when your cmd2.publishZipFile service execution end. Then read the log file created, if anything wrong occur you should have more informations from this log file.
