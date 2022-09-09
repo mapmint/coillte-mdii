@@ -64,23 +64,27 @@ analyze <- function(conf,inputs,outputs) {
 
     ##calculate the Plot Level Estimates
     data %>% mutate(ba = pi * (Diameter/10)^2 / 40000) %>%
-	group_by(HU_ID, Comp_sub, Plotname, Speciesname) %>% 
-	summarize(m_dbh = round(mean(Diameter)/10,1), 
-		  max_dbh = round(max(Diameter)/10,1), 
-		  min_dbh = round(min(Diameter)/10,1),
-		  n_stems = n(),
-		  stemsha = n()/0.02,
-		  basalha = round(sum(ba)/0.02,1)) -> plotEstimates
+        mutate_at(vars(Height), ~replace(., . == 0, NA)) %>%
+        group_by(HU_ID, Comp_sub, Plotname, Speciesname) %>%
+        summarize(m_dbh = round(mean(Diameter)/10,1),
+                  max_dbh = round(max(Diameter)/10,1),
+                  min_dbh = round(min(Diameter)/10,1),
+                  mean_height = round(mean(na.omit(Height)),1),
+                  n_stems = n(),
+                  stemsha = as.integer(n()/mean(Plotsize)),
+                  basalha = round(sum(ba)/mean(Plotsize),1)) -> plotEstimates
 
     ##write field measurements to the SQLite table
     dbWriteTable(con, "plotEstimates", plotEstimates, append=TRUE)
 
     ##calculate the Sub-compartment Estimates
     plotEstimates %>% group_by(HU_ID, Comp_sub, Speciesname) %>%
-	summarize(m_dbh = round(mean(m_dbh),1), 
-                  m_stemsha = as.integer(mean(stemsha)),
-                  m_basalha = round(mean(basalha),1)) -> comsubEstimates
-      			
+        summarize(m_dbh = round(mean(m_dbh),1),
+                m_stemsha = as.integer(mean(stemsha)),
+                m_height = round(mean(mean_height)),
+                m_basalha = round(mean(basalha),1)) -> comsubEstimates
+
+    			
 
     zoo[["conf"]][["lenv"]][["message"]] <<- 'Sub-compartment estimates generated and uploaded...'
     ##write field measurements to the SQLite table
