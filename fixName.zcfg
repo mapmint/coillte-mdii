@@ -1,0 +1,36 @@
+[fixName]
+ Title = Verify if any email has been received
+ Abstract = Verify if any email has been received (by invoking getLastEmails service). If new mail contain attachment, then the attachment is imported in the databse (by invoking publishZipFiles service).
+ processVersion = 1
+ storeSupported = true
+ statusSupported = true
+ serviceType = Python
+ serviceProvider = service
+ <DataInputs>
+  [path]
+   Title = The input datastore
+   Abstract = The input datastore name to search for datasource.
+   minOccurs = 1
+   maxOccurs = 1
+   <LiteralData>
+    DataType = string
+    <Default />
+   </LiteralData>
+  [ext]
+   Title = The input datastore
+   Abstract = The input datastore name to search for datasource.
+   minOccurs = 1
+   maxOccurs = 1
+   <LiteralData>
+    DataType = string
+    <Default />
+   </LiteralData>
+ </DataInputs>
+ <DataOutputs>
+  [Result]
+   Title = The resulting  directory path
+   Abstract = The resulting  directory path containing the uncompressed archive
+   <LiteralData>
+    DataType = string
+    <Default />
+   </LiteralData>

@@ -1,4 +1,4 @@
-[publishZipFiles]
+[produceValidatedZipFile]
  Title = This carries out the validation checks for the segment integration.
  Abstract = This carries out the validation checks for the segment integration.
  processVersion = 1
@@ -7,20 +7,20 @@
  serviceType = JS
  serviceProvider = service.js
  <DataInputs>
-  [zip]
+  [id]
    Title = The input datastore
    Abstract = The input datastore name to search for datasource.
-   minOccurs = 1
+   minOccurs = 0
    maxOccurs = unbounded
    <ComplexData>
     <Default>
      mimeType = application/zip
     </Default>
    </ComplexData>
-  [mail]
+  [mailTo]
    Title = The email addresss
    Abstract = The email address that has originally sent the mail containing the zip file.
-   minOccurs = 1
+   minOccurs = 0
    maxOccurs = 1
    <ComplexData>
     <Default>
@@ -32,7 +32,8 @@
   [Result]
    Title = The resulting  directory path
    Abstract = The resulting  directory path containing the uncompressed archive
-   <LiteralData>
-    DataType = string
-    <Default />
-   </LiteralData>
+   <ComplexData>
+    <Default>
+     mimeType = application/zip
+    </Default>
+   </ComplexData>
