@@ -64,7 +64,7 @@ analyze <- function(conf,inputs,outputs) {
 
     ##calculate the Plot Level Estimates
     data %>% mutate(ba = pi * (Diameter/10)^2 / 40000) %>%
-        mutate_at(vars(Height), ~replace(., . == 0, NA)) %>%
+        ##mutate_at(vars(Height), ~replace(., . == 0, NA)) %>%
         group_by(HU_ID, Comp_sub, Plotname, Speciesname) %>%
         summarize(m_dbh = round(mean(Diameter)/10,1),
                   max_dbh = round(max(Diameter)/10,1),
