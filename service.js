@@ -23,12 +23,14 @@
  * THE SOFTWARE.
  */
 
+var localModulePath="cmd2";
+
 function mailCheck(conf,inputs,outputs){
     var inputs00={
 	"a": {"dataType":"string", "type":"literal", "value": "toto"}
     }
     var myOutputs00= {Result: { type: 'RawDataOutput', "mimeType": "application/json" }};
-    var myProcess00 = new ZOO.Process(conf["main"]["serverAddress"],'cmd2.getLastEmails');
+    var myProcess00 = new ZOO.Process(conf["main"]["serverAddress"],localModulePath+'.getLastEmails');
     var myExecuteResult00=myProcess00.Execute(inputs00,myOutputs00);
     alert(myExecuteResult00);
     try{
@@ -47,7 +49,7 @@ function mailCheck(conf,inputs,outputs){
 		"mail": {"dataType":"string", "value":jsonObject[i]["mail"] }
 	    }
 	    var myOutputs00= {Result: { type: 'RawDataOutput', "mimeType": "application/json" }};
-	    var myProcess00 = new ZOO.Process(conf["main"]["serverAddress"],'cmd2.publishZipFiles');
+	    var myProcess00 = new ZOO.Process(conf["main"]["serverAddress"],localModulePath+'.publishZipFiles');
 	    var myExecuteResult00=myProcess00.Execute(inputs00,myOutputs00);
 	    alert(myExecuteResult00);
 	    outputs["Result"]["value"]=myExecuteResult00;
@@ -56,7 +58,7 @@ function mailCheck(conf,inputs,outputs){
 		"name": {"dataType":"string", "type":"literal", "value": jsonObject[i]["mail"]}
 	    }
 	    var myOutputs01= {Result: { type: 'RawDataOutput', "mimeType": "text/plain" }};
-	    var myProcess01 = new ZOO.Process(conf["main"]["serverAddress"],'cmd2.sendmail');
+	    var myProcess01 = new ZOO.Process(conf["main"]["serverAddress"],localModulePath+'.sendmail');
 	    var myExecuteResult01=myProcess01.Execute(inputs01,myOutputs01);
 	    alert(myExecuteResult01);   
 	}
@@ -161,7 +163,7 @@ function publishZipFiles(conf,inputs,outputs){
 		"ext": {"value": "xls", "type": "string" }
 	};
         var myOutputs01= {Result: { type: 'RawDataOutput', "mimeType": "plain/text" }};
-        var myProcess01 = new ZOO.Process(conf["main"]["serverAddress"],'cmd2.fixName');
+        var myProcess01 = new ZOO.Process(conf["main"]["serverAddress"],localModulePath+'.fixName');
         var myExecuteResult01=myProcess01.Execute(myInputs01,myOutputs01);
         alert("******************************",myExecuteResult01,"***********************************");
 	var xlsFile=myExecuteResult01;//myExecuteResult00+"/"+cFile.replace(/\/var\/www\/html\/tmp/g,"").replace(/\./g,"_").replace(/_zip/g,".xls").replace(/-/g,"_");
@@ -207,9 +209,9 @@ function publishZipFiles(conf,inputs,outputs){
 	    "data": {"mimeType":"application/zip", "type":"reference", "value": "file://"+xlsFile }
 	}
 	var myOutputs01= {Result: { type: 'RawDataOutput', "mimeType": "plain/text" }};
-	var myProcess01 = new ZOO.Process(conf["main"]["serverAddress"],'cmd2.analyze');
+	var myProcess01 = new ZOO.Process(conf["main"]["serverAddress"],localModulePath+'.analyze');
 	var myExecuteResult01=myProcess01.Execute(inputs01,myOutputs01);//,"Cookie: MMID="+conf["senv"]["MMID"]);
-	alert("cmd2.analyze "+myExecuteResult01);
+	alert(localModulePath+".analyze "+myExecuteResult01);
         if(myExecuteResult01.indexOf("Exception")>=0){
            data = myExecuteResult01.replace(/^<\?xml\s+version\s*=\s*(["'])[^\1]+\1[^?]*\?>/, "");
            data = new XML(data);
@@ -432,7 +434,7 @@ function setValidity(conf,inputs,outputs){
     var myProcess = new ZOO.Process(conf["main"]["serverAddress"],'vector-tools.vectInfo');
     var myExecuteResult=myProcess.Execute(myInputs,myOutputs);
     alert(myExecuteResult);
-    var myProcess = new ZOO.Process(conf["main"]["serverAddress"],'cmd2.sendmail0');
+    var myProcess = new ZOO.Process(conf["main"]["serverAddress"],localModulePath+'.sendmail0');
     var myInputs={
     };
     var isValid=false;
@@ -465,8 +467,6 @@ function setValidity(conf,inputs,outputs){
     }
     return {result: ZOO.SERVICE_SUCCEEDED, conf: conf, outputs: {Result: {"value": "Data successfully saved"}}};
 }
-
-
 
 function produceValidatedZipFile(conf,inputs,outputs){
     var archive=null;

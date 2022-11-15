@@ -51,8 +51,12 @@ analyze <- function(conf,inputs,outputs) {
     ##handle 0 in the com_sub if it has been incorrectly entered
     data %>% mutate(Comp_sub=ifelse(substr(Comp_sub,6,6)==0, paste(substr(Comp_sub,1,5),'O',substr(Comp_sub,7,7),sep=''), paste(substr(Comp_sub,1,7)))) -> data
 
+    kml_origin <- dbGetQuery(con, "select name, com_sub_real FROM kml_origin")
+
     ##generate the data for the plot location table
-    data %>% select(HU_ID, Comp_sub, Plotname, Plotdate, 'Plotlocation - Latitude', 'Plotlocation - Longitude') %>%
+    data <- left_join(data, kml_origin, by=c('Plotname'='name'))
+
+    data %>% select(HU_ID, Comp_sub, com_sub_real, Plotname, Plotdate, 'Plotlocation - Latitude', 'Plotlocation - Longitude') %>%
 	rename('Lat' = 'Plotlocation - Latitude') %>%
 	rename('Long' = 'Plotlocation - Longitude') %>%
 	unique() -> plotLocation
@@ -63,39 +67,45 @@ analyze <- function(conf,inputs,outputs) {
     zoo[["conf"]][["lenv"]][["message"]] <<- 'Plot location created and uploaded...'
 
     ##calculate the Plot Level Estimates
+    data %>%  mutate_at(c('Height'), ~na_if(.,0)) -> data
     data %>% mutate(ba = pi * (Diameter/10)^2 / 40000) %>%
-        mutate_at(vars(Height), ~replace(., . == 0, NA)) %>%
-        group_by(HU_ID, Comp_sub, Plotname, Speciesname) %>%
-        summarize(m_dbh = round(mean(Diameter)/10,1),
-                  max_dbh = round(max(Diameter)/10,1),
-                  min_dbh = round(min(Diameter)/10,1),
-                  mean_height = round(mean(na.omit(Height)),1),
-                  n_stems = n(),
-                  stemsha = as.integer(n()/mean(Plotsize)),
-                  basalha = round(sum(ba)/mean(Plotsize),1)) -> plotEstimates
+	mutate_at(vars(Height), ~replace(., . == 0, NA)) %>%
+	mutate(n_plots = length(unique(Plotname))) %>%
+	group_by(HU_ID, com_sub_real, Plotname, Speciesname) %>%
+	summarize(m_dbh = round(mean(Diameter)/10,0),
+		  max_dbh = round(max(Diameter)/10,0),
+		  min_dbh = round(min(Diameter)/10,0),
+		  n_stems = n(),
+		  n_plots = mean(n_plots),
+		  mean_height = round(mean(na.omit(Height)),1),
+		  stemsha = as.integer(n()/mean(Plotsize)),
+		  basalha = round(sum(ba)/mean(Plotsize),0)) -> plotEstimates
 
     ##write field measurements to the SQLite table
     dbWriteTable(con, "plotEstimates", plotEstimates, append=TRUE)
 
     ##calculate the Sub-compartment Estimates
-    plotEstimates %>% group_by(HU_ID, Comp_sub, Speciesname) %>%
-        summarize(m_dbh = round(mean(m_dbh),1),
-                m_stemsha = as.integer(mean(stemsha)),
-                m_height = round(mean(mean_height)),
-                m_basalha = round(mean(basalha),1)) -> comsubEstimates
+    plotEstimates %>% group_by(HU_ID, com_sub_real, Speciesname) %>%
+		  summarize(m_dbh = round(mean(m_dbh),0),
+		  ###dmci: here we handle the calculation of the second spp
+		  ##       specifically if spp2:n are not present in all plots
+		  m_stemsha = as.integer(sum(stemsha)/n_plots),
+		  m_height = round(mean(mean_height)),
+		  m_basalha = round(mean(basalha),0)) -> comsubEstimates
 
-    			
 
     zoo[["conf"]][["lenv"]][["message"]] <<- 'Sub-compartment estimates generated and uploaded...'
     ##write field measurements to the SQLite table
     dbWriteTable(con, "comsubEstimates", comsubEstimates, append=TRUE)
 
     # Set the result
-    zoo[["outputs"]][["Result"]][["generated_file"]] <<- posthinDB
+    #zoo[["outputs"]][["Result"]][["generated_file"]] <<- posthinDB
+    zoo[["outputs"]][["Result"]][["value"]] <<- posthinDB
+    #zoo[["outputs"]][["Result"]][["storage"]] <<- posthinDB
     
-    cat('\n')
-    cat('\n')
-    cat('\n')
+    #cat('\n')
+    #cat('\n')
+    #cat('\n')
     
     # Return SERVICE_SUCCEEDEED
     return(zoo[["SERVICE_SUCCEEDEED"]])
